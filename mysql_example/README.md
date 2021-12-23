@@ -1,1 +1,1 @@
-# mysql-gorm-example
+# mysql gorm example
