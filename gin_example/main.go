@@ -63,7 +63,7 @@ func main() {
 }
 
 func HelloWorld(c *gin.Context) {
-	// 虚假的链路跟踪方式，使用context参数
+	// 使用context参数，实现链路跟踪
 	ctx := GetRequestId(c)
 	fmt.Printf("外部 %v\n", ctx.Value("RequestId"))
 	go func(context.Context) {
