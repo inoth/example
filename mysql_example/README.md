@@ -1,1 +1,2 @@
-# mysql gorm example
+# mysql x gorm example
+mysql 与 gorm 使用示例
