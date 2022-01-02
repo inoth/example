@@ -32,6 +32,7 @@ func main() {
 				c.String(500, err.(error).Error())
 				// 中断管道执行，直接返回
 				c.Abort()
+				return
 			}
 		}()
 		c.Next()
