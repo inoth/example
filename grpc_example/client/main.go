@@ -15,7 +15,7 @@ var UserSvc = "go.micro.srv.TestUser"
 
 func main() {
 	consulReg := consul.NewRegistry(
-		registry.Addrs("Consul host"),
+		registry.Addrs("localhost:8500"),
 	)
 	client.DefaultClient = gCli.NewClient(
 		client.Registry(consulReg),

@@ -13,7 +13,7 @@ import (
 
 func main() {
 	consulReg := consul.NewRegistry(
-		registry.Addrs("Consul Host"),
+		registry.Addrs("localhost:8500"),
 	)
 	server.DefaultServer = gSrv.NewServer(
 		server.Registry(consulReg),
