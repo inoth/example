@@ -22,7 +22,9 @@ func main() {
 
 	logrus.AddHook(hook)
 
-	logrus.Info("output to nsq")
+	logrus.Info("output to nsq info")
+	logrus.Warn("output to nsq warn")
+	logrus.Error("output to nsq error")
 
 	time.Sleep(time.Second * 5)
 }
