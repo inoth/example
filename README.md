@@ -5,4 +5,4 @@
 - redis_example: redis 连接、使用示例
 - grpc_example: go-micro & consul 使用示例
 - logrusXnsq_example: logrus hook 输出日志到nsq队列参考示例
-- nsqXes_example: 消费nsq消息，写入es数据库
+- nsqXes_example: 消费nsq队列消息，写入es数据库
