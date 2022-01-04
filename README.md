@@ -4,3 +4,4 @@
 - mysql_example: mysql 连接、CURD使用示例
 - redis_example: redis 连接、使用示例
 - grpc_example: go-micro & consul 使用示例
+- logrusXnsq_example: logrus hook 输出日志到nsq队列参考示例
