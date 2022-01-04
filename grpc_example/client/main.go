@@ -28,7 +28,7 @@ func main() {
 }
 
 func call(svc string, action string, req interface{}, rsp interface{}) error {
-	rq := client.NewRequest(svc, action, req, client.WithContentType("application/json"))
+	rq := client.NewRequest(svc, action, req, client.WithContentType("application/grpc+proto"))
 	if err := client.Call(context.TODO(), rq, rsp); err != nil {
 		return err
 	}
