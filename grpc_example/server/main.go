@@ -20,7 +20,7 @@ func main() {
 		server.Name("go.micro.srv.TestUser"),
 	)
 	service := micro.NewService(
-		micro.Address("ServerPort"),
+		micro.Address(":9978"),
 		micro.Version("latest"),
 		// micro.WrapHandler(errWrapper),
 	)
@@ -28,4 +28,5 @@ func main() {
 
 	pb.RegisterUserHandler(service.Server(), new(svc.UserService))
 	// micro.RegisterSubscriber("go.micro.srv.TestUser", service.Server(), new(svc.UserService))
+	service.Run()
 }
