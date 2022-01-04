@@ -12,14 +12,17 @@ import (
 
 func main() {
 	config := nsq.NewConfig()
-	client, err := nsq.NewProducer("nsq host", config)
+	client, err := nsq.NewProducer("localhost:4150", config)
 	if err != nil {
 		fmt.Errorf(err.Error())
 		os.Exit(1)
 	}
 	defer client.Stop()
 	hook, err := hook.NewAsyncNsqHook(client, "logrus-topic", logrus.InfoLevel)
-
+	if err != nil {
+		fmt.Errorf(err.Error())
+		os.Exit(1)
+	}
 	logrus.AddHook(hook)
 
 	logrus.Info("output to nsq info")
