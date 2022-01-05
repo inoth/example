@@ -21,7 +21,7 @@ func main() {
 		client.Registry(consulReg),
 	)
 
-	rsp := &pb.UserIdReply{}
+	rsp := pb.UserIdReply{}
 	_ = call(UserSvc, "User.GetUserById", pb.UserIdRequest{}, &rsp)
 
 	fmt.Printf("%v:%v", rsp.Uid, rsp.Name)
