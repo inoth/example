@@ -22,13 +22,17 @@ func main() {
 	)
 
 	rsp := pb.UserIdReply{}
-	_ = call(UserSvc, "User.GetUserById", pb.UserIdRequest{}, &rsp)
-
+	err := call(UserSvc, "User.GetUserById", pb.UserIdRequest{}, &rsp)
+	if err != nil {
+		fmt.Errorf(err.Error())
+	}
 	fmt.Printf("%v:%v", rsp.Uid, rsp.Name)
 }
 
 func call(svc string, action string, req interface{}, rsp interface{}) error {
-	rq := client.NewRequest(svc, action, req, client.WithContentType("application/grpc+proto"))
+	// content type grpc http2 only
+	// rq := client.NewRequest(svc, action, req, client.WithContentType("application/grpc+proto"))
+	rq := client.NewRequest(svc, action, req, client.WithContentType("application/json"))
 	if err := client.Call(context.TODO(), rq, rsp); err != nil {
 		return err
 	}
