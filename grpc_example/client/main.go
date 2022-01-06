@@ -21,7 +21,7 @@ func main() {
 		client.Registry(consulReg),
 	)
 
-	rsp := &pb.UserIdReply{}
+	rsp := pb.UserIdReply{}
 	err := call(UserSvc, "User.GetUserById", pb.UserIdRequest{}, &rsp)
 	if err != nil {
 		fmt.Errorf(err.Error())
