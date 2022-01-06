@@ -5,23 +5,23 @@ import (
 	pb "message/message"
 
 	"github.com/asim/go-micro/plugins/registry/consul/v3"
-	gSrv "github.com/asim/go-micro/plugins/server/grpc/v3"
 	"github.com/asim/go-micro/v3"
 	"github.com/asim/go-micro/v3/registry"
-	"github.com/asim/go-micro/v3/server"
 )
 
 func main() {
 	consulReg := consul.NewRegistry(
 		registry.Addrs("localhost:8500"),
 	)
-	server.DefaultServer = gSrv.NewServer(
-		server.Registry(consulReg),
-		server.Name("go.micro.srv.TestUser"),
-	)
+	// server.DefaultServer = gSrv.NewServer(
+	// 	server.Registry(consulReg),
+	// 	server.Name("go.micro.srv.TestUser"),
+	// )
 	service := micro.NewService(
 		micro.Address(":9978"),
 		micro.Version("latest"),
+		micro.Name("go.micro.srv.TestUser"),
+		micro.Registry(consulReg),
 		// micro.WrapHandler(errWrapper),
 	)
 	service.Init()
