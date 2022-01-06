@@ -1,0 +1,1 @@
+# grpc & consul for asp.net core example
