@@ -2,16 +2,17 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
-var DB *gorm.DB
+var db *gorm.DB
 
 func InitDatabase(constr string) {
-	db, err := gorm.Open(mysql.New(mysql.Config{
+	conn, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       constr,
 		DefaultStringSize:         1024, // string 类型字段的默认长度
 		DisableDatetimePrecision:  true,
@@ -26,7 +27,18 @@ func InitDatabase(constr string) {
 		log.Fatal(err.Error())
 		panic(err)
 	}
-	DB = db
+	sqldb, err := conn.DB()
+	if err != nil {
+		log.Fatal(err.Error())
+		panic(err)
+	}
+	sqldb.SetConnMaxIdleTime(10)
+	sqldb.SetMaxOpenConns(100)
+	sqldb.SetConnMaxLifetime(time.Second * 60)
+	db = conn
+}
+func GetDb() *gorm.DB {
+	return db
 }
 
 type UserInfo struct {
@@ -35,11 +47,14 @@ type UserInfo struct {
 }
 
 func main() {
+	InitDatabase("user:passwd@(localhost:3306)/user?charset=utf8&parseTime=True&loc=Local")
+
+	mysqldb := GetDb()
 	user := UserInfo{}
-	DB.First(&user, "uid = ?", 1)
-	DB.Model(&user).Update("Name", "test")
-	DB.Delete(&user, "uid = ?", 1)
+	mysqldb.First(&user, "uid = ?", 1)
+	mysqldb.Model(&user).Update("Name", "test")
+	mysqldb.Delete(&user, "uid = ?", 1)
 
 	users := make([]UserInfo, 0)
-	DB.Where("1=1").Scan(&users)
+	mysqldb.Where("1=1").Scan(&users)
 }
