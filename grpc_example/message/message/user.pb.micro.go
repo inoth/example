@@ -5,7 +5,8 @@ package message
 
 import (
 	fmt "fmt"
-	proto "github.com/golang/protobuf/proto"
+	proto "google.golang.org/protobuf/proto"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	math "math"
 )
 
@@ -20,12 +21,6 @@ import (
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package it is being compiled against.
-// A compilation error at this line likely means your copy of the
-// proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ api.Endpoint
@@ -43,6 +38,7 @@ func NewUserEndpoints() []*api.Endpoint {
 
 type UserService interface {
 	GetUserById(ctx context.Context, in *UserIdRequest, opts ...client.CallOption) (*UserIdReply, error)
+	Test(ctx context.Context, in *ApplicationRequest, opts ...client.CallOption) (*ApplicationDetailReply, error)
 }
 
 type userService struct {
@@ -67,15 +63,27 @@ func (c *userService) GetUserById(ctx context.Context, in *UserIdRequest, opts .
 	return out, nil
 }
 
+func (c *userService) Test(ctx context.Context, in *ApplicationRequest, opts ...client.CallOption) (*ApplicationDetailReply, error) {
+	req := c.c.NewRequest(c.name, "User.Test", in)
+	out := new(ApplicationDetailReply)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for User service
 
 type UserHandler interface {
 	GetUserById(context.Context, *UserIdRequest, *UserIdReply) error
+	Test(context.Context, *ApplicationRequest, *ApplicationDetailReply) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
 	type user interface {
 		GetUserById(ctx context.Context, in *UserIdRequest, out *UserIdReply) error
+		Test(ctx context.Context, in *ApplicationRequest, out *ApplicationDetailReply) error
 	}
 	type User struct {
 		user
@@ -90,4 +98,8 @@ type userHandler struct {
 
 func (h *userHandler) GetUserById(ctx context.Context, in *UserIdRequest, out *UserIdReply) error {
 	return h.UserHandler.GetUserById(ctx, in, out)
+}
+
+func (h *userHandler) Test(ctx context.Context, in *ApplicationRequest, out *ApplicationDetailReply) error {
+	return h.UserHandler.Test(ctx, in, out)
 }

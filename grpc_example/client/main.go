@@ -9,6 +9,7 @@ import (
 	"github.com/asim/go-micro/plugins/registry/consul/v3"
 	"github.com/asim/go-micro/v3/client"
 	"github.com/asim/go-micro/v3/registry"
+	"github.com/sirupsen/logrus"
 )
 
 var UserSvc = "go.micro.srv.TestUser"
@@ -21,12 +22,20 @@ func main() {
 		client.Registry(consulReg),
 	)
 
-	rsp := pb.UserIdReply{}
-	err := call(UserSvc, "User.GetUserById", pb.UserIdRequest{}, &rsp)
+	// rsp := pb.UserIdReply{}
+	// err := call(UserSvc, "User.GetUserById", pb.UserIdRequest{}, &rsp)
+	// if err != nil {
+	// 	fmt.Errorf(err.Error())
+	// }
+	// fmt.Printf("%v:%v", rsp.Uid, rsp.Name)
+
+	rsp := pb.ApplicationDetailReply{}
+	err := call(UserSvc, "User.Test", pb.ApplicationRequest{}, &rsp)
 	if err != nil {
-		fmt.Errorf(err.Error())
+		logrus.Error(err)
+		return
 	}
-	fmt.Printf("%v:%v", rsp.Uid, rsp.Name)
+	fmt.Printf("%v, %d", rsp.AppName, len(rsp.Versions))
 }
 
 func call(svc string, action string, req interface{}, rsp interface{}) error {

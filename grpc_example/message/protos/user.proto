@@ -1,13 +1,16 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "./message";
 
 package message;
 
-// protoc --proto_path=. --micro_out=. --go_out=. protos/*.proto
+// protoc --proto_path=. --micro_out=~/go/bin --go_out=. protos/*.proto
 
 service User {
     rpc GetUserById (UserIdRequest) returns (UserIdReply) {}
+    rpc Test (ApplicationRequest) returns (ApplicationDetailReply) {}
 }
 
 message UserIdRequest {
@@ -17,4 +20,35 @@ message UserIdRequest {
 message UserIdReply {
     string uid = 1;
     string name = 2;
+    repeated UserDetail item = 3;
+}
+
+message UserDetail {
+    string name = 1;
+    string uid = 2;
+}
+
+message ApplicationRequest {    
+    int32 app_id = 1;
+    string app_type = 2;
+    string conf_content = 3;
+    string version = 4;
+    int32 uid = 5;
+}
+
+// 应用详情,包含个版本信息
+message ApplicationDetailReply {
+    int32 id = 1;
+    string app_name = 2;
+    string desc = 3;
+    string app_type = 4;
+    repeated ApplicationVersion versions = 5;
+}
+
+// 版本信息
+message ApplicationVersion {
+    int32 id = 1;
+    string version = 2;    
+    string package_path = 3;
+    google.protobuf.Timestamp create_time = 4;
 }
